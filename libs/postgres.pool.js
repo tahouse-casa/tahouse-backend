@@ -3,6 +3,16 @@ const { config } = require("../config/config");
 
 let URL = config.dbUrl;
 
-const pool = new Pool({ connectionString: URL });
+const options = {
+  connectionString: URL,
+};
+
+if (config.isProd) {
+  options.ssl = {
+    rejectUnauthorized: false,
+  };
+}
+
+const pool = new Pool(options);
 
 module.exports = pool;
