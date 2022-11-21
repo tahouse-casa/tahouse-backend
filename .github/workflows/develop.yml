@@ -11,21 +11,8 @@ env:
   SERVICE: dev-tahouse-backend
 
 jobs:
-  build-test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16.14.2
-    - name: Install dependecies
-      run: npm ci
-    #- name: Test
-    #  run: npm test
-        
   build-test-push:
     runs-on: ubuntu-latest
-    needs: [build-test]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
