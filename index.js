@@ -22,7 +22,7 @@ const whitelist = [
 
 const options = {
   origin: (origin, callback) => {
-    if (whitelist.includes(origin) || !origin) {
+    if (whitelist.includes(origin) || origin === undefined) {
       callback(null, true);
     } else {
       callback(new Error("no permitido"));
