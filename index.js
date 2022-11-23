@@ -15,9 +15,9 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 
 const whitelist = [
-  "http://localhost:3000/",
-  "https://dev.tahouse.casa/",
-  "https://www.thunderclient.com/",
+  "http://localhost:3000",
+  "https://dev.tahouse.casa",
+  "https://www.thunderclient.com",
 ];
 
 const options = {
