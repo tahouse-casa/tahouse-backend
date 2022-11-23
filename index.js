@@ -22,6 +22,7 @@ const whitelist = [
 
 const options = {
   origin: (origin, callback) => {
+    console.log(origin)
     if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
