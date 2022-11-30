@@ -6,8 +6,20 @@ class PropertyService {
   constructor() {}
 
   async create(data) {
-    const newProperty = await models.Property.create(data);
-    return newProperty;
+    const valuesType = [
+      "Casa",
+      "Departamento",
+      "Hotel",
+      "Terreno",
+      "Monoambiente",
+    ];
+    const viewValueType = valuesType.includes(data.type);
+    if (viewValueType) {
+      const newProperty = await models.Property.create(data);
+      return newProperty;
+    } else {
+      throw boom.badData("type not valid");
+    }
   }
 
   async find(query) {

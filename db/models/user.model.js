@@ -18,6 +18,11 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
+  recoveryToken: {
+    field: "recovery_token",
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
@@ -36,8 +41,8 @@ const UserSchema = {
     type: DataTypes.STRING,
   },
   phone: {
-    allowNull: false,
-    type: DataTypes.INTEGER,
+    allowNull: true,
+    type: DataTypes.STRING,
   },
   createdAt: {
     allowNull: false,

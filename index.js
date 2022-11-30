@@ -15,14 +15,14 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 
 const whitelist = [
-  "http://localhost:3000/",
-  "https://dev.tahouse.casa/",
-  "https://www.thunderclient.com/",
+  "http://localhost:3000",
+  "https://dev.tahouse.casa",
+  "https://www.thunderclient.com",
 ];
 
 const options = {
   origin: (origin, callback) => {
-    if (whitelist.includes(origin) || !origin) {
+    if (whitelist.includes(origin) || origin === undefined) {
       callback(null, true);
     } else {
       callback(new Error("no permitido"));
@@ -30,6 +30,8 @@ const options = {
   },
 };
 app.use(cors(options));
+
+require("./tools");
 
 app.get("/", (req, res) => {
   res.send("Hola este es mi server en express");
