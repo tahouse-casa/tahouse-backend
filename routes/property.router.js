@@ -6,7 +6,8 @@ const {
   createPropertySchema,
   getPropertySchema,
 } = require("./../schemas/property.schema");
-
+const passport = require("passport");
+const { checkRoles } = require("./../middlewares/auth.handler");
 const router = express.Router();
 const service = new PropertyService();
 
@@ -36,6 +37,8 @@ router.get(
 
 router.post(
   "/",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("admin"),
   validatorHandler(createPropertySchema, "body"),
   async (req, res, next) => {
     try {
@@ -50,6 +53,8 @@ router.post(
 
 router.patch(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("admin"),
   validatorHandler(getPropertySchema, "params"),
   validatorHandler(updatePropertySchema, "body"),
   async (req, res, next) => {
@@ -66,6 +71,8 @@ router.patch(
 
 router.delete(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("admin"),
   validatorHandler(getPropertySchema, "params"),
   async (req, res, next) => {
     try {

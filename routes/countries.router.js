@@ -6,6 +6,8 @@ const {
   createCountrysSchema,
   getCountrySchema,
 } = require("./../schemas/countries.schema");
+const passport = require("passport");
+const { checkRoles } = require("./../middlewares/auth.handler");
 
 const router = express.Router();
 const service = new CountriesService();
@@ -35,6 +37,8 @@ router.get(
 
 router.post(
   "/",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("admin"),
   validatorHandler(createCountrysSchema, "body"),
   async (req, res, next) => {
     try {
@@ -49,6 +53,8 @@ router.post(
 
 router.patch(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("admin"),
   validatorHandler(getCountrySchema, "params"),
   validatorHandler(updateCountrySchema, "body"),
   async (req, res, next) => {
@@ -65,6 +71,8 @@ router.patch(
 
 router.delete(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("admin"),
   validatorHandler(getCountrySchema, "params"),
   async (req, res, next) => {
     try {

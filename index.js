@@ -31,6 +31,8 @@ const options = {
 };
 app.use(cors(options));
 
+require("./tools");
+
 app.get("/", (req, res) => {
   res.send("Hola este es mi server en express");
 });
