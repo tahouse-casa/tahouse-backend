@@ -21,6 +21,11 @@ const CountriesSchema = {
     allowNull: false,
     type: DataTypes.DECIMAL,
   },
+  citys: {
+    allowNull: false,
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [""],
+  },
 };
 
 class Countries extends Model {
