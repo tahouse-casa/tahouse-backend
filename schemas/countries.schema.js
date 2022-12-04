@@ -4,17 +4,20 @@ const id = Joi.number().integer();
 const country = Joi.string().min(2);
 const latitud = Joi.number();
 const longitud = Joi.number();
+const citys = Joi.array().items(Joi.string());
 
 const createCountrysSchema = Joi.object({
   latitud: latitud.required(),
   longitud: longitud.required(),
   country: country.required(),
+  citys: citys.required(),
 });
 
 const updateCountrySchema = Joi.object({
   country: country,
   latitud: latitud,
   longitud: longitud,
+  citys: citys,
 });
 
 const getCountrySchema = Joi.object({

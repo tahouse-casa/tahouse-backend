@@ -29,6 +29,17 @@ const PropertySchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
+  environments: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+  },
+  typeOperation: {
+    field: "type_operation",
+    allowNull: false,
+    type: DataTypes.STRING,
+    defaultValue: "Alquiler",
+  },
   bathrooms: {
     allowNull: false,
     type: DataTypes.INTEGER,
@@ -47,6 +58,16 @@ const PropertySchema = {
     allowNull: false,
     type: DataTypes.STRING,
     defaultValue: "Casa",
+  },
+  phone: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    defaultValue: "3012905676",
+  },
+  email: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    defaultValue: "ideaBonplant@gmail.com",
   },
   urlImage: {
     allowNull: false,
