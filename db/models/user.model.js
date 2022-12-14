@@ -54,10 +54,12 @@ const UserSchema = {
 
 class User extends Model {
   static associate(models) {
-    /*this.hasOne(models.Customer, {
-      as: "customer",
+    this.belongsToMany(models.Property, {
+      as: "properties_favorites",
+      through: models.Favorites,
       foreignKey: "userId",
-    });*/
+      otherKey: "propertyId",
+    });
   }
 
   static config(sequelize) {
