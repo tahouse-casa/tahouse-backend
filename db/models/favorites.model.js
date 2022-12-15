@@ -12,9 +12,9 @@ const FavoritesSchema = {
   },
   userId: {
     field: "user_id",
-    allowNull: true,
-    type: DataTypes.INTEGER,
+    allowNull: false,
     unique: false,
+    type: DataTypes.INTEGER,
     references: {
       model: USER_TABLE,
       key: "id",
@@ -25,8 +25,8 @@ const FavoritesSchema = {
   propertyId: {
     field: "property_id",
     allowNull: false,
-    type: DataTypes.INTEGER,
     unique: false,
+    type: DataTypes.INTEGER,
     references: {
       model: PROPERTY_TABLE,
       key: "id",
