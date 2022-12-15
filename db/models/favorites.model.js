@@ -24,7 +24,7 @@ const FavoritesSchema = {
   },
   propertyId: {
     field: "property_id",
-    allowNull: false,
+    allowNull: true,
     unique: false,
     type: DataTypes.INTEGER,
     references: {
