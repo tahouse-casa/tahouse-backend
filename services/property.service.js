@@ -1,7 +1,9 @@
 const boom = require("@hapi/boom");
 
 const { models } = require("../libs/sequelize");
+const FavoritesService = require("../services/favorites.service");
 
+const service = new FavoritesService();
 class PropertyService {
   constructor() {}
 
@@ -51,6 +53,15 @@ class PropertyService {
 
   async delete(id) {
     const property = await this.findOne(id);
+    const allPropertiesLiked = await service.find();
+    const filterIfExist = allPropertiesLiked.filter(
+      (item) => item.dataValues.propertyId === property.id
+    );
+    if (filterIfExist) {
+      filterIfExist.forEach(async (item) => {
+        await service.delete(item.dataValues.id);
+      });
+    }
     await property.destroy();
     return { id };
   }
