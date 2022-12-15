@@ -88,12 +88,7 @@ const PropertySchema = {
 };
 
 class Property extends Model {
-  static associate(models) {
-    /*this.hasOne(models.Customer, {
-        as: "customer",
-        foreignKey: "userId",
-      });*/
-  }
+  static associate(models) {}
   static config(sequelize) {
     return {
       sequelize,
