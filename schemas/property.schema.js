@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const id = Joi.number().integer();
 const city = Joi.string().min(3);
-const country = Joi.string().min(4);
+const country = Joi.string();
 const environments = Joi.number().integer();
 const typeOperation = Joi.string();
 const state = Joi.string();
