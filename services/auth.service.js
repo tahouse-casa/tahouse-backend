@@ -46,8 +46,8 @@ class AuthService {
       sub: user.id,
     };
     const token = jwt.sign(payload, secret, { expiresIn: "15min" });
-    const link = `http://localhost:3001/api/v1/recovery?token=${token}`;
-    //const link = `https://dev.tahouse.casa/recovery?token=${token}`;
+    //const link = `http://localhost:3000/change-password/${token}`;
+    const link = `https://dev.tahouse.casa/change-password/${token}`;
     await service.update(user.id, { recoveryToken: token });
     const mail = {
       from: config.emailUser,
