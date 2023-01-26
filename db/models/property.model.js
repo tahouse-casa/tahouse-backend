@@ -88,7 +88,9 @@ const PropertySchema = {
 };
 
 class Property extends Model {
-  static associate(models) {}
+  static associate(models) {
+      this.hasOne(models.Featured, {as: 'featured', foreignKey: 'propertyId'})
+  }
   static config(sequelize) {
     return {
       sequelize,
