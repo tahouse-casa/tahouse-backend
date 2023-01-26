@@ -4,7 +4,7 @@ const propertyRouter = require("./property.router");
 const countriesRouter = require("./countries.router");
 const authRouter = require("./auth.router");
 const favoritesRouter = require("./favorites.router");
-
+const featuredRouter = require('./featured.router')
 function routerApi(app) {
   const router = express.Router();
   app.use("/api/v1", router);
@@ -13,6 +13,7 @@ function routerApi(app) {
   router.use("/countries", countriesRouter);
   router.use("/auth", authRouter);
   router.use("/favorites", favoritesRouter);
+  router.use("/featured", featuredRouter);
 }
 
 module.exports = routerApi;
