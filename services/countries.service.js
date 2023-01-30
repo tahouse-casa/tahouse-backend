@@ -9,9 +9,8 @@ class CountriesService {
     try {
       const callBeforeInfo = await this.find()
       const findIfExist = callBeforeInfo.find((item)=>item?.country?.toLowerCase() === data?.country?.toLowerCase())
-      console.log('find',findIfExist);
       if (findIfExist) {
-      throw boom.unauthorized("País ya existente")
+        throw boom.unauthorized()
     }
       const newCountry = await models.Countries.create(data);
     return newCountry;
