@@ -6,8 +6,17 @@ class CountriesService {
   constructor() {}
 
   async create(data) {
-    const newCountry = await models.Countries.create(data);
+    try {
+      const callBeforeInfo = await this.find()
+      const findIfExist = callBeforeInfo.find(item?.country?.toLowerCase() === data?.country?.toLowerCase())
+      if (findIfExist) {
+      throw boom.unauthorized("País ya existente")
+    }
+      const newCountry = await models.Countries.create(data);
     return newCountry;
+    } catch (err){
+      console.error(err)
+    }
   }
 
   async find() {
