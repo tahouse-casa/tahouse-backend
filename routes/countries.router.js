@@ -44,7 +44,11 @@ router.post(
     try {
       const body = req.body;
       const newCountry = await service.create(body);
-      res.status(201).json(newCountry);
+      if (newCountry) {
+        res.status(201).json(newCountry);
+      } else {
+        res.status(401).json({statusText: 'Unauthorized'})
+      }
     } catch (error) {
       next(error);
     }

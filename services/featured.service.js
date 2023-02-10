@@ -6,18 +6,17 @@ class FeaturedService {
   constructor() {}
 
   async create(data) {
-    const allFeatured = await this.find('noOrder');
+    const allFeatured = await this.find("noOrder");
     const viewIfExist = allFeatured.filter(
-      (item) =>
-        item.propertyId === data.propertyId
+      (item) => item.propertyId === data.propertyId
     );
 
     if (viewIfExist.length > 0) {
       throw boom.badRequest("already exist");
     } else if (allFeatured.length >= 5) {
-      const id = allFeatured[0].id
-      const deleteOld = await this.delete(id)
-      if (deleteOld) {        
+      const id = allFeatured[0].id;
+      const deleteOld = await this.delete(id);
+      if (deleteOld) {
         const newFeatured = await models.Featured.create(data);
         return newFeatured;
       }
@@ -28,27 +27,34 @@ class FeaturedService {
   }
 
   async find(noOrder) {
-    const rta = await models.Featured.findAll({
-      include: ["property"]
+    let rta = await models.Featured.findAll({
+      include: ["property"],
     });
-      if (noOrder) {
-          return rta
+    for (let featured of rta) {
+      if (!featured.property && !featured.propertyId) {
+        await this.delete(featured.id);
+        let rta = rta.filter((item) => item.id !== featured.id);
       }
-      const order = rta.sort((a, b) => {
-          if (a.property.price < b.property.price) {
-              return -1
-          }
-          if (a.property.price > b.property.price) {
-              return 1
-          }
-          return 0
-      })
+    }
+    if (noOrder) {
+      return rta;
+    }
+
+    const order = rta.sort((a, b) => {
+      if (a.property.price < b.property.price) {
+        return -1;
+      }
+      if (a.property.price > b.property.price) {
+        return 1;
+      }
+      return 0;
+    });
     return order;
   }
-    
+
   async findOne(id) {
     const rta = await models.Featured.findByPk(id, {
-      include: ["property"]
+      include: ["property"],
     });
     return rta;
   }
