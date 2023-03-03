@@ -21,6 +21,11 @@ router.post(
 router.post("/recovery", async (req, res, next) => {
   try {
     const { email } = req.body;
+    if (!email) {
+      res
+        .status(400)
+        .json({ message: "Se necesita que envie un email válido." });
+    }
     const rta = await service.sendRecovery(email);
     res.json(rta);
   } catch (error) {
