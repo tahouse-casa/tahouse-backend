@@ -23,14 +23,17 @@
         "prettier": "^2.3.2"
     },
     "dependencies": {
+        "@google-cloud/storage": "^6.9.3",
         "@hapi/boom": "^9.1.4",
         "bcrypt": "^5.1.0",
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
-        "express": "^4.17.1",
+        "express": "^4.18.2",
+        "express-rate-limit": "^6.7.0",
         "faker": "^5.5.3",
         "joi": "^17.4.2",
         "jsonwebtoken": "^8.5.1",
+        "multer": "^1.4.5-lts.1",
         "nodemailer": "^6.8.0",
         "passport": "^0.6.0",
         "passport-jwt": "^4.0.0",

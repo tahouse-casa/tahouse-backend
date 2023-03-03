@@ -1,5 +1,6 @@
 const boom = require("@hapi/boom");
-
+const { Storage } = require("@google-cloud/storage");
+const Multer = require("multer");
 const { models } = require("../libs/sequelize");
 const FavoritesService = require("../services/favorites.service");
 
@@ -64,6 +65,36 @@ class PropertyService {
     }
     await property.destroy();
     return { id };
+  }
+  
+  async upload(image) {
+    const multer = Multer({
+      storage: Multer.memoryStorage(),
+      limits: {
+        fileSize: 5,
+      },
+    });
+    const cloudStorage = new Storage({
+      keyFilename: "", //${ __dirname } / service_account_key.json,
+      projectId: "PROJECT_ID",
+    });
+    const bucketName = "YOUR_BUCKET_NAME";
+
+    const bucket = cloudStorage.bucket(bucketName);
+
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream();
+
+    blobStream.on("error", (err) => {
+      next(err);
+    });
+
+    blobStream.on("finish", () => {
+      // The public URL can be used to directly access the file via HTTP.
+      const publicUrl = format(
+        "https:" //storage.googleapis.com/${bucket.name}/${blob.name}
+      );
+    });
   }
 }
 

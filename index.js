@@ -1,7 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 const routerApi = require("./routes");
-
+const rateLimit = require("express-rate-limit");
 const {
   logErrors,
   errorHandler,
@@ -31,6 +31,12 @@ const options = {
 };
 app.use(cors(options));
 
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 50,
+});
+
+app.use(limiter);
 require("./tools");
 
 app.get("/", (req, res) => {
