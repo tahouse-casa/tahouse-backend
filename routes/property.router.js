@@ -85,4 +85,29 @@ router.delete(
   }
 );
 
+//app.use(Multer().none());
+
+//multer.array('photos')
+
+router.post(
+  "/uploadFile",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("admin"),
+  async (req, res, next) => {
+    try {
+      if (!req?.file) {
+        res.status(401).json({
+          success: false,
+          message: "La imagen es obligatoria.",
+        });
+      }
+      const UploadImage = await service.upload(req.file);
+
+      console.log("result", UploadImage);
+      res.status(201).json(UploadImage);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 module.exports = router;

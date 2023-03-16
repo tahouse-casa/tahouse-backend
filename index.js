@@ -1,4 +1,5 @@
 const cors = require("cors");
+const Multer = require("multer");
 const express = require("express");
 const routerApi = require("./routes");
 const rateLimit = require("express-rate-limit");
@@ -12,8 +13,14 @@ const {
 const app = express();
 const port = process.env.PORT || 3001;
 
+const multer = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
+app.use(multer.single("file"));
 app.use(express.json());
-
 const whitelist = [
   "http://localhost:3000",
   "https://dev.tahouse.casa",
@@ -29,6 +36,7 @@ const options = {
     }
   },
 };
+
 app.use(cors(options));
 
 const limiter = rateLimit({
@@ -37,6 +45,7 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
+
 require("./tools");
 
 app.get("/", (req, res) => {

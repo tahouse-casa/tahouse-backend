@@ -1,10 +1,11 @@
 const boom = require("@hapi/boom");
-const { Storage } = require("@google-cloud/storage");
-const Multer = require("multer");
 const { models } = require("../libs/sequelize");
 const FavoritesService = require("../services/favorites.service");
-
 const service = new FavoritesService();
+const Cloud = require("@google-cloud/storage");
+const { Storage } = Cloud;
+const { config } = require("../config/config");
+
 class PropertyService {
   constructor() {}
 
@@ -66,34 +67,40 @@ class PropertyService {
     await property.destroy();
     return { id };
   }
-  
+
   async upload(image) {
-    const multer = Multer({
-      storage: Multer.memoryStorage(),
-      limits: {
-        fileSize: 5,
-      },
-    });
-    const cloudStorage = new Storage({
-      keyFilename: "", //${ __dirname } / service_account_key.json,
-      projectId: "PROJECT_ID",
-    });
-    const bucketName = "YOUR_BUCKET_NAME";
+    return new Promise((resolve, reject) => {
+      const { originalname, buffer } = image;
 
-    const bucket = cloudStorage.bucket(bucketName);
+      const cloudStorage = new Storage({
+        keyFilename: `${__dirname}/assets/service_account_key.json`,
+        projectId: config.key_storage_project_id,
+      });
 
-    const blob = bucket.file(req.file.originalname);
-    const blobStream = blob.createWriteStream();
+      const bucketName = "dev-tahouse-static";
 
-    blobStream.on("error", (err) => {
-      next(err);
-    });
+      const bucket = cloudStorage.bucket(bucketName);
 
-    blobStream.on("finish", () => {
-      // The public URL can be used to directly access the file via HTTP.
-      const publicUrl = format(
-        "https:" //storage.googleapis.com/${bucket.name}/${blob.name}
-      );
+      const blob = bucket.file(originalname);
+
+      const blobStream = blob.createWriteStream();
+
+      blobStream
+        .on("finish", () => {
+          const publicUrl = `https:storage.googleapis.com/${bucket.name}/${blob.name}`;
+          console.log("mirar", publicUrl);
+          resolve({
+            success: true,
+            url: publicUrl,
+          });
+        })
+        .on("error", () => {
+          reject({
+            success: false,
+            message: "Something be bad.",
+          });
+        })
+        .end(buffer);
     });
   }
 }

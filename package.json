@@ -23,7 +23,7 @@
         "prettier": "^2.3.2"
     },
     "dependencies": {
-        "@google-cloud/storage": "^6.9.3",
+        "@google-cloud/storage": "^6.9.4",
         "@hapi/boom": "^9.1.4",
         "bcrypt": "^5.1.0",
         "cors": "^2.8.5",

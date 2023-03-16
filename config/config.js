@@ -16,6 +16,8 @@ const config = {
   dbUrl:
     process.env.DATABASE_URL ||
     "postgres://admin:admin123@localhost:5432/real_estates",
+  //storage
+  key_storage_project_id: process.env.project_id || "",
 };
 
 module.exports = { config };
