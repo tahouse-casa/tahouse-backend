@@ -19,7 +19,7 @@ const multer = Multer({
     fileSize: 5 * 1024 * 1024,
   },
 });
-app.use(multer.single("file"));
+app.use(multer.array("file"));
 app.use(express.json());
 const whitelist = [
   "http://localhost:3000",

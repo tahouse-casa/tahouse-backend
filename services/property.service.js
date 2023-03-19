@@ -61,7 +61,7 @@ class PropertyService {
     );
     if (filterIfExist) {
       filterIfExist.forEach(async (item) => {
-        await service.delete(item.dataValues.id);
+        await service.delete(item.dataValues);
       });
     }
     await property.destroy();
@@ -88,7 +88,6 @@ class PropertyService {
       blobStream
         .on("finish", () => {
           const publicUrl = `https:storage.googleapis.com/${bucket.name}/${blob.name}`;
-          console.log("mirar", publicUrl);
           resolve({
             success: true,
             url: publicUrl,

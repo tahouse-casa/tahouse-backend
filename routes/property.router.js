@@ -85,26 +85,29 @@ router.delete(
   }
 );
 
-//app.use(Multer().none());
-
-//multer.array('photos')
-
 router.post(
   "/uploadFile",
   passport.authenticate("jwt", { session: false }),
   checkRoles("admin"),
   async (req, res, next) => {
     try {
-      if (!req?.file) {
+      if (!req?.files) {
         res.status(401).json({
           success: false,
-          message: "La imagen es obligatoria.",
+          message: "Las imagenes son obligatoria.",
         });
       }
-      const UploadImage = await service.upload(req.file);
-
-      console.log("result", UploadImage);
-      res.status(201).json(UploadImage);
+      let haveError = true;
+      let urls = [];
+      for await (const file of req.files) {
+        const UploadImage = await service.upload(file);
+        if (!UploadImage.success) {
+          haveError = true;
+        } else {
+          urls = [...urls, UploadImage.url];
+        }
+      }
+      res.status(201).json({ success: true, urls });
     } catch (error) {
       next(error);
     }
