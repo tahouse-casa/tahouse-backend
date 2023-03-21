@@ -118,11 +118,6 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-.env.test
-.env.production
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -194,4 +189,7 @@ $RECYCLE.BIN/
 postgres_data
 mysql_data
 docker-compose.yml
-# End of https://www.toptal.com/developers/gitignore/api/node,windows,linux,macos
+
+#Protect local env
+
+/local/.env
