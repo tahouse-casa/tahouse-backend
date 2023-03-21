@@ -73,7 +73,7 @@ class PropertyService {
       const { originalname, buffer } = image;
 
       const cloudStorage = new Storage({
-        keyFilename: `${__dirname}/assets/service_account_key.json`,
+        credentials: JSON.parse(process.env.GOOGLE_KEY),
         projectId: config.key_storage_project_id,
       });
 

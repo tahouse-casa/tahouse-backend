@@ -23,6 +23,7 @@ app.use(multer.array("file"));
 app.use(express.json());
 const whitelist = [
   "http://localhost:3000",
+  "http://localhost:8080",
   "https://dev.tahouse.casa",
   "https://www.thunderclient.com",
 ];
