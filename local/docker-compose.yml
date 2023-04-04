@@ -1,17 +1,6 @@
 version: "3.3"
 
 services:
-  postgres:
-    image: postgres:14
-    container_name: postgress
-    networks:
-      - tahouse
-    environment:
-      - POSTGRES_DB=real_estates
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin123
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
   
   backend:
     container_name: backend

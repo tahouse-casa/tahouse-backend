@@ -1,28 +1,22 @@
-const boom = require("@hapi/boom");
-const { models } = require("../libs/sequelize");
-const FavoritesService = require("../services/favorites.service");
+const boom = require('@hapi/boom');
+const { models } = require('../libs/sequelize');
+const FavoritesService = require('../services/favorites.service');
 const service = new FavoritesService();
-const Cloud = require("@google-cloud/storage");
+const Cloud = require('@google-cloud/storage');
 const { Storage } = Cloud;
-const { config } = require("../config/config");
+const { config } = require('../config/config');
 
 class PropertyService {
   constructor() {}
 
   async create(data) {
-    const valuesType = [
-      "Casa",
-      "Departamento",
-      "Hotel",
-      "Terreno",
-      "Monoambiente",
-    ];
+    const valuesType = ['Casa', 'Departamento', 'Hotel', 'Terreno', 'Monoambiente'];
     const viewValueType = valuesType.includes(data.type);
     if (viewValueType) {
       const newProperty = await models.Property.create(data);
       return newProperty;
     } else {
-      throw boom.badData("type not valid");
+      throw boom.badData('type not valid');
     }
   }
 
@@ -42,7 +36,7 @@ class PropertyService {
   async findOne(id) {
     const property = await models.Property.findByPk(id);
     if (!property) {
-      throw boom.notFound("property not found");
+      throw boom.notFound('property not found');
     }
     return property;
   }
@@ -77,7 +71,7 @@ class PropertyService {
         projectId: config.key_storage_project_id,
       });
 
-      const bucketName = "dev-tahouse-static";
+      const bucketName = 'dev-tahouse-static';
 
       const bucket = cloudStorage.bucket(bucketName);
 
@@ -86,17 +80,17 @@ class PropertyService {
       const blobStream = blob.createWriteStream();
 
       blobStream
-        .on("finish", () => {
+        .on('finish', () => {
           const publicUrl = `https:storage.googleapis.com/${bucket.name}/${blob.name}`;
           resolve({
             success: true,
             url: publicUrl,
           });
         })
-        .on("error", () => {
+        .on('error', () => {
           reject({
             success: false,
-            message: "Something be bad.",
+            message: 'Something be bad.',
           });
         })
         .end(buffer);
