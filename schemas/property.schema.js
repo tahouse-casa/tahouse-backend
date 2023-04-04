@@ -1,13 +1,13 @@
 const Joi = require("joi");
 
 const id = Joi.number().integer();
-const city = Joi.string().min(3);
-const country = Joi.string();
+const city = Joi.string().min(3).max(30);
+const country = Joi.string().max(30);
 const environments = Joi.number().integer();
-const typeOperation = Joi.string();
-const state = Joi.string();
-const type = Joi.string();
-const address = Joi.string();
+const typeOperation = Joi.string().max(30);
+const state = Joi.string().max(30);
+const type = Joi.string().max(30);
+const address = Joi.string().max(30);
 const rooms = Joi.number().integer();
 const bathrooms = Joi.number().integer();
 const urlImage = Joi.array().items(Joi.string());
@@ -16,7 +16,7 @@ const meters = Joi.number().integer().min(2);
 const email = Joi.string().email();
 
 const phone = Joi.string().min(10);
-const description = Joi.string().min(10);
+const description = Joi.string().min(10).max(30);
 
 const createPropertySchema = Joi.object({
   city: city.required(),

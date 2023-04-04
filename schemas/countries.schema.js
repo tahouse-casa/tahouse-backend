@@ -1,10 +1,10 @@
 const Joi = require("joi");
 
 const id = Joi.number().integer();
-const country = Joi.string().min(2);
+const country = Joi.string().min(2).max(30);
 const latitud = Joi.number();
 const longitud = Joi.number();
-const citys = Joi.array().items(Joi.string());
+const citys = Joi.array().items(Joi.string().max(30));
 
 const createCountrysSchema = Joi.object({
   latitud: latitud.required(),
