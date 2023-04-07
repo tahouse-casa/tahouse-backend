@@ -1,7 +1,7 @@
 const cors = require('cors');
 const Multer = require('multer');
 const express = require('express');
-const routerApi = require('./routes');
+const { router } = require('./routes');
 const rateLimit = require('express-rate-limit');
 const { logErrors, errorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
@@ -50,7 +50,7 @@ require('./tools');
 app.get('/', (_req: any, res: { send: (arg0: string) => void }) => {
   res.send('Hola este es mi server en express');
 });
-routerApi(app);
+app.use('/api/v1', router);
 
 app.use(logErrors);
 app.use(ormErrorHandler);

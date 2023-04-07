@@ -1,6 +1,6 @@
-const { Model, DataTypes, Sequelize } = require("sequelize");
+const { Model, DataTypes } = require('sequelize');
 
-const COUNTRIES_TABLE = "countries";
+const COUNTRIES_TABLE = 'countries';
 
 const CountriesSchema = {
   id: {
@@ -24,7 +24,7 @@ const CountriesSchema = {
   citys: {
     allowNull: false,
     type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [""],
+    defaultValue: [''],
   },
 };
 
@@ -34,7 +34,7 @@ class Countries extends Model {
     return {
       sequelize,
       tableName: COUNTRIES_TABLE,
-      modelName: "Countries",
+      modelName: 'Countries',
       timestamps: false,
     };
   }

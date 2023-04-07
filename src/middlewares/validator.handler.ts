@@ -1,14 +1,14 @@
-const boom = require('@hapi/boom');
+import { NextFunction, Request, Response } from 'express';
 
-function validatorHandler(schema: any, property: any) {
-  return (req: any, _res: any, next: (arg0: {} | { error: boolean; message: string }) => any) => {
-    const data = req[property];
+const validatorHandler = (schema: any, property: string) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    const data = req.body[property];
     const { error } = schema.validate(data, { abortEarly: false });
     if (error) {
-      next({ error: true, message: 'No estás autorizado' });
+      next(new Error('No estás autorizado'));
     }
-    next({});
+    next();
   };
-}
+};
 
-module.exports = validatorHandler;
+export default validatorHandler;

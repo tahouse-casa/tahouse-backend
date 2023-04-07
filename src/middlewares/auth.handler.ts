@@ -1,31 +1,25 @@
-const { config } = require('../config/config');
+import { NextFunction, Request, Response } from 'express';
 
-function checkApiKey(
-  req: { headers: { [x: string]: any } },
-  _res: any,
-  next: (arg0: {} | { error: boolean; message: string }) => void
-) {
-  const apiKey = req.headers['api'];
-  if (apiKey == config.apiKey) {
+import config from '../config/config';
+
+const checkApiKey = (req: Request, _res: Response, next: NextFunction) => {
+  const apiKey = Number(req.headers['api']);
+  if (apiKey === config.apiKey) {
     next({});
   } else {
     next({ error: true, message: "you don't be authorized" });
   }
-}
+};
 
-function checkRoles(...roles: string[]) {
-  return (
-    req: { user: any },
-    _res: any,
-    next: (arg0: {} | { error: boolean; message: string }) => void
-  ) => {
-    const user = req.user;
+const checkRoles = (...roles: string[]) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    const user = req.body.user;
     if (roles.includes(user.role)) {
       next({});
     } else {
       next({ error: true, message: "you don't be authorized" });
     }
   };
-}
+};
 
-module.exports = { checkApiKey, checkRoles };
+export { checkApiKey, checkRoles };

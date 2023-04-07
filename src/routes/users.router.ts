@@ -1,16 +1,25 @@
-const express = require('express');
-const UserService = require('./../services/user.service');
-const validatorHandler = require('./../middlewares/validator.handler');
-const { updateUserSchema, createUserSchema, getUserSchema } = require('./../schemas/user.schema');
-const passport = require('passport');
-const { checkRoles } = require('./../middlewares/auth.handler');
+import { NextFunction, Request, Response } from 'express';
+import express from 'express';
+import passport from 'passport';
+import {
+  createUser,
+  findAllUsers,
+  findUserById,
+  updateUser,
+  deleteUser,
+} from './../services/user.service';
+import validatorHandler from './../middlewares/validator.handler';
+import { checkRoles } from './../middlewares/auth.handler';
+import { updateUserSchema, createUserSchema, getUserSchema } from './../schemas/user.schema';
 const router = express.Router();
-const service = new UserService();
 
-router.get('/', async (_req: any, res: { json: (arg0: {}) => void }, next: (arg0: any) => void) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await service.find();
-    res.json(users);
+    const users = await findAllUsers();
+    if (!users.success) {
+      res.status(400).json({ success: false, message: 'No se encontraron usuarios.' });
+    }
+    res.status(200).json({ ...users, message: 'Usuarios encontrados satisfactoriamente.' });
   } catch (error) {
     next(error);
   }
@@ -19,15 +28,14 @@ router.get('/', async (_req: any, res: { json: (arg0: {}) => void }, next: (arg0
 router.get(
   '/:id',
   validatorHandler(getUserSchema, 'params'),
-  async (
-    req: { params: { id: string } },
-    res: { json: (arg0: object) => void },
-    next: (arg0: any) => void
-  ) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const user = await service.findOne(id);
-      res.json(user);
+      const user = await findUserById(id);
+      if (!user.success) {
+        res.status(400).json({ success: false, message: 'No se encontraron usuarios.' });
+      }
+      res.status(200).json({ ...user, message: 'Usuario encontrado satisfactoriamente.' });
     } catch (error) {
       next(error);
     }
@@ -37,17 +45,14 @@ router.get(
 router.post(
   '/',
   validatorHandler(createUserSchema, 'body'),
-  async (
-    req: { body: any },
-    res: {
-      status: (arg0: number) => { (): any; new (): any; json: { (arg0: any): void; new (): any } };
-    },
-    next: (arg0: unknown) => void
-  ) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body;
-      const newUser = await service.create(body);
-      res.status(201).json(newUser);
+      const newUser = await createUser(body);
+      if (!newUser.success) {
+        res.status(400).json({ success: false, message: 'No se encontraron usuarios.' });
+      }
+      res.status(201).json({ ...newUser, message: 'Usuario creado con éxito' });
     } catch (error) {
       next(error);
     }
@@ -58,16 +63,18 @@ router.patch(
   '/',
   passport.authenticate('jwt', { session: false }),
   validatorHandler(updateUserSchema, 'body'),
-  async (
-    req: { user: string; body: any },
-    res: { json: (arg0: any) => void },
-    next: (arg0: unknown) => void
-  ) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.user.sub;
+      const id = req.body.user.sub;
       const body = req.body;
-      const user = await service.update(id, body);
-      res.json(user);
+      const user: any = await updateUser(id, body);
+      if (!user.success) {
+        res.status(400).json({
+          success: false,
+          message: user?.message || 'El usuario no fue encontrado.',
+        });
+      }
+      res.status(200).json({ ...user, message: 'Actualizado satisfactoriamente.' });
     } catch (error) {
       next(error);
     }
@@ -79,20 +86,13 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   checkRoles('admin'),
   validatorHandler(getUserSchema, 'params'),
-  async (
-    req: { params: { id: any } },
-    res: {
-      status: (arg0: number) => {
-        (): any;
-        new (): any;
-        json: { (arg0: { id: any }): void; new (): any };
-      };
-    },
-    next: (arg0: unknown) => void
-  ) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      await service.delete(id);
+      const deleteForId = await deleteUser(id);
+      if (!deleteForId.success) {
+        res.status(400).json(deleteForId);
+      }
       res.status(201).json({ id });
     } catch (error) {
       next(error);
@@ -100,5 +100,4 @@ router.delete(
   }
 );
 
-module.exports = router;
-export {};
+export default router;
